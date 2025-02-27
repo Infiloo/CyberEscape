@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Cyber Escape</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #0a0a0a; text-align: center; color: #0ff; overflow: hidden; }
+        canvas { background: #111; display: none; border-radius: 10px; box-shadow: 0 0 20px #0ff; }
+
+        /* Overlays */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: flex; align-items: center;
+            justify-content: center; flex-direction: column; backdrop-filter: blur(10px);
+        }
+        .hidden { display: none; }
+
+        /* Buttons */
+        button {
+            background: #0ff; color: #000; padding: 15px 25px;
+            font-size: 20px; border: none; border-radius: 5px;
+            cursor: pointer; margin: 10px; transition: 0.3s;
+            box-shadow: 0 0 10px #0ff;
+        }
+        button:hover { background: #00d9d9; }
+
+        /* Flaggen-Buttons */
+        .flag-btn { width: 100px; border-radius: 10px; cursor: pointer; margin: 10px; }
+
+        /* Virtueller Joystick */
+        #mobileControls {
+            display: none; position: fixed; bottom: 20px; left: 20px;
+            width: 120px; height: 120px; background: rgba(0, 255, 255, 0.2);
+            border-radius: 50%; border: 2px solid #0ff;
+        }
+
+        .joystick {
+            width: 60px; height: 60px; background: rgba(0, 255, 255, 0.4);
+            border-radius: 50%; border: 2px solid #0ff; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            cursor: pointer; transition: 0.1s ease;
+        }
+
+        .joystick:active {
+            background: rgba(0, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <h1>Cyber Escape</h1>
+
+    <!-- Sprachauswahl -->
+    <div id="languageScreen" class="overlay">
+        <h2>Language / Sprache</h2>
+        <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" class="flag-btn" onclick="setLanguage('de')">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" class="flag-btn" onclick="setLanguage('en')">
+    </div>
+
+    <!-- Start-Menü -->
+    <div id="startScreen" class="overlay hidden">
+        <h2 id="chooseText">Wähle deine Steuerung:</h2>
+        <button onclick="startGame('pc')">PC</button>
+        <button onclick="startGame('mobile')">Mobile</button>
+        <button onclick="changeLanguage()">🌍</button>
+    </div>
+
+    <!-- Spielfläche -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Virtueller Joystick -->
+    <div id="mobileControls">
+        <div class="joystick" id="joystick"></div>
+    </div>
+
+    <script>
+        let language = "de";
+        let player, obstacles, gameOver, score, controlMode;
+        let playerSpeed = 5;
+        let joystick = document.getElementById("joystick");
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        function setLanguage(lang) {
+            language = lang;
+            document.getElementById("languageScreen").classList.add("hidden");
+            document.getElementById("startScreen").classList.remove("hidden");
+        }
+
+        function changeLanguage() {
+            document.getElementById("startScreen").classList.add("hidden");
+            document.getElementById("languageScreen").classList.remove("hidden");
+        }
+
+        function startGame(mode) {
+            controlMode = mode;
+            document.getElementById("startScreen").classList.add("hidden");
+            canvas.style.display = "block";
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            if (mode === "mobile") {
+                document.getElementById("mobileControls").style.display = "block";
+                joystick.addEventListener("touchstart", touchStart);
+                joystick.addEventListener("touchmove", touchMove);
+                joystick.addEventListener("touchend", touchEnd);
+            } else {
+                document.addEventListener("keydown", handleKeyDown);
+            }
+
+            initGame();
+        }
+
+        function initGame() {
+            player = { x: canvas.width / 2, y: canvas.height - 50, size: 20 };
+            obstacles = [];
+            gameOver = false;
+            score = 0;
+
+            for (let i = 0; i < 5; i++) {
+                obstacles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: 20, speed: 2 + Math.random() * 2 });
+            }
+
+            gameLoop();
+        }
+
+        function gameLoop() {
+            if (gameOver) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0ff";
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+
+            ctx.fillStyle = "red";
+            obstacles.forEach(obs => {
+                ctx.fillRect(obs.x, obs.y, obs.size, obs.size);
+                obs.y += obs.speed;
+                if (obs.y > canvas.height) {
+                    obs.y = -20;
+                    obs.x = Math.random() * canvas.width;
+                    score++;
+                }
+                if (player.x < obs.x + obs.size && player.x + player.size > obs.x && player.y < obs.y + obs.size && player.y + player.size > obs.y) {
+                    gameOver = true;
+                    alert("Game Over! Score: " + score);
+                    location.reload();
+                }
+            });
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function handleKeyDown(event) {
+            switch (event.key) {
+                case "ArrowUp": case "w": player.y -= playerSpeed; break;
+                case "ArrowDown": case "s": player.y += playerSpeed; break;
+                case "ArrowLeft": case "a": player.x -= playerSpeed; break;
+                case "ArrowRight": case "d": player.x += playerSpeed; break;
+            }
+        }
+
+        function touchStart(e) {
+            e.preventDefault();
+            let touch = e.touches[0];
+            joystick.dataset.startX = touch.pageX;
+            joystick.dataset.startY = touch.pageY;
+        }
+
+        function touchMove(e) {
+            e.preventDefault();
+            if (!joystick.dataset.startX) return;
+            let touch = e.touches[0];
+            let dx = touch.pageX - joystick.dataset.startX;
+            let dy = touch.pageY - joystick.dataset.startY;
+
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance > 40) {
+                let angle = Math.atan2(dy, dx);
+                let vx = Math.cos(angle) * playerSpeed;
+                let vy = Math.sin(angle) * playerSpeed;
+                player.x += vx;
+                player.y += vy;
+            }
+
+            joystick.style.transform = `translate(-50%, -50%) translate(${dx}px, ${dy}px)`;
+        }
+
+        function touchEnd(e) {
+            e.preventDefault();
+            joystick.style.transform = "translate(-50%, -50%)";
+            joystick.dataset.startX = null;
+            joystick.dataset.startY = null;
+        }
+    </script>
+</body>
+</html>
