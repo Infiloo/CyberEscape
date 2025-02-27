@@ -20,7 +20,7 @@ Das Spiel bietet dynamische Steuerungen, die je nach Plattform unterschiedlich s
 Das Spiel enthält auch einen Sprachauswahlbildschirm zu Beginn, auf dem du zwischen Englisch 🇬🇧 und Deutsch 🇩🇪 wählen kannst, was es einem breiteren Publikum zugänglich macht. Mit einer Mischung aus Action, Strategie und Reflexion bietet "Cyber Escape" ein fesselndes und unterhaltsames Erlebnis für alle Spielerarten.
 
 ---
-# We submitted this game to GamePix as well; let's hope it gets accepted.
+We submitted this game to GamePix as well; let's hope it gets accepted.
 
 ---
 Changelogs&Updates: https://tame-centaur-df2.notion.site/Updates-Changelogs-19b0c5db49e08018ab4af046a7e3db22?pvs=4
