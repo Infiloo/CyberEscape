@@ -18,6 +18,9 @@ Deutsch 🇩🇪
 Das Spiel bietet dynamische Steuerungen, die je nach Plattform unterschiedlich sind. Auf dem PC können die Spieler die Pfeiltasten (oder WASD) verwenden, um die Bewegung des Spielers zu steuern, während auf mobilen Geräten ein virtueller Joystick verwendet wird. Der Joystick erscheint dynamisch an der Stelle, an der du den Bildschirm berührst, was ein nahtloses und immersives Spielerlebnis ermöglicht, ähnlich wie bei beliebten mobilen Spielen wie Brawl Stars. Um es noch herausfordernder zu machen, ist der Spieler für die ersten 5 Sekunden nach dem Spawnen unverwundbar, was Zeit gibt, sich auf die kommenden Hindernisse vorzubereiten. Je länger du überlebst, desto schneller und häufiger erscheinen die Hindernisse.
 
 Das Spiel enthält auch einen Sprachauswahlbildschirm zu Beginn, auf dem du zwischen Englisch 🇬🇧 und Deutsch 🇩🇪 wählen kannst, was es einem breiteren Publikum zugänglich macht. Mit einer Mischung aus Action, Strategie und Reflexion bietet "Cyber Escape" ein fesselndes und unterhaltsames Erlebnis für alle Spielerarten.
+---
+We submitted this game also to GamePix lets hope its get Accepted.
+---
 
 Changelogs&Updates: https://tame-centaur-df2.notion.site/Updates-Changelogs-19b0c5db49e08018ab4af046a7e3db22?pvs=4
 
